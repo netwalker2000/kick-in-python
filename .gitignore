@@ -1,0 +1,4 @@
+.idea
+mysite
+db.sqlite3
+.DS_Store
