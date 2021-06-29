@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -7,12 +9,30 @@ import service
 
 
 # Create your views here.
+from productApp.serializers import ProductBriefSerializer
+
 
 @api_view(
     ['GET']
 )
-def query_list_no_param(request):
-    service.product_service()
+def query_product_list(request):
+    """
+    This API is for query the product list.
+    """
+    name = ""
+    if "name" in request.query_params.keys():
+        name = request.query_params["name"]
+    category = ""
+    if "category" in request.query_params.keys():
+        category = request.query_params["category"]
+    last_updated_at = 0
+    if "last_updated_at" in request.query_params.keys():
+        last_updated_at = int(request.query_params["last_updated_at"])
+    limit = 15
+    if "limit" in request.query_params.keys():
+        limit = int(request.query_params["limit"])
+
+    service.product_service(name, category, last_updated_at, limit)
     return JsonResponse({"code": 200, "message": "Success"})
 
 
@@ -21,14 +41,16 @@ def query_list_no_param(request):
 )
 def query_product_detail(request, id):
     print("id from path variable: " + id)
-    my_product = service.query_product_detail(id)
-    print(my_product)
-    return JsonResponse({"id": 1, "name": "iphone1", "category": "ELEC"})
+    data = service.query_product_detail(id)
+    product_payload = {"products": [ProductBriefSerializer().convert_to_dict(product) for product in data]}
+    return JsonResponse(product_payload)
+
 
 @api_view(
     ['GET', 'POST']
 )
-def comments(request):
+def comments(request, id):
+    print("id from path variable: " + id)
     if request.method == 'GET':
         print("geeeeeet")
     else:

@@ -19,14 +19,11 @@ engine = create_engine(
 def query_product_list(name, category, last_updated_at, limit):
     conn = engine.raw_connection()
     cursor = conn.cursor()
-    cursor.execute(
-        "select * from product_tab WHERE 1=1 "
-        "and name like '%s%' " if name is not None else "%s"
-        "and category = '%s' " if category is not None else "%s"      
-        "and updated_at > %d "                                                    
-        "order by updated_at "
-        "limit %d ",
-        (name, category, last_updated_at, limit))
+    where_name = "and name like '" + name + "%' " if name else ""
+    where_category = "and category like '" + category + "%' " if category else ""
+    sql = "select * from product_tab WHERE 1=1 " + where_name + where_category + " and updated_at > "+str(last_updated_at)+" order by updated_at limit " + str(limit)
+    print(sql)
+    cursor.execute(sql)
     data = cursor.fetchall()
     print(data)
     cursor.close()
