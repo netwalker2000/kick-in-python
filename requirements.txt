@@ -1,5 +1,5 @@
 Django>=1.7
+pymysql==0.10.1
 SQLAlchemy==1.4.19
-mysql-connector-python==8.0.25
 protobuf==3.3.0
 django-rest-swagger==2.2.0

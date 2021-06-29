@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 from sqlalchemy import create_engine
+
+import models
+
 print("Begin...")
 
 engine = create_engine(
@@ -32,6 +35,7 @@ def query_product_detail(id):
     cursor = conn.cursor()
     cursor.execute('select * from product_tab WHERE id = %s', (id,))
     data = cursor.fetchall()
+    myProduct = models.Product()
     print(data)
     cursor.close()
     conn.close()
