@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 ADMIN_DISABLE = True
 # todo: also need to disalbe auth sessions
 INSTALLED_APPS = [
+    'productApp',
     'rest_framework_swagger',
     'django.contrib.auth',
     'django.contrib.contenttypes',
