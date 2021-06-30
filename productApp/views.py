@@ -1,4 +1,5 @@
 # Create your views here.
+import datetime
 import time
 import urllib
 
@@ -11,6 +12,10 @@ import service
 import user.register
 import user.login
 from productApp.serializers import ProductBriefSerializer, CommentSerializer, PhotoSerializer
+
+
+# global storage for comments tree to save the resource
+global_comment_cache = {}
 
 
 @api_view(
@@ -64,6 +69,11 @@ def query_product_detail(request, id):
 def comments(request, id):
     print("id from path variable: " + id)
     if request.method == 'GET':
+        # return cached if not expired
+        if id in global_comment_cache:
+            print("hit cache!")
+            print(global_comment_cache[id])
+            # return global_comment_cache[id].comment_payload
         data = service.query_comments(id)
         model_map = {}
         for model in data:
@@ -74,6 +84,13 @@ def comments(request, id):
             "message": "Success",
             "comments": [CommentSerializer().convert_to_dict(comment, model_map) for comment in data]
         }
+        if id not in global_comment_cache:
+            global_comment_cache[id] = {
+                "id": id,
+                "created_at": time.time(),
+                "expired_at": time.time(), # add 60 sec
+                "comment_payload": comment_payload
+            }
         return JsonResponse(comment_payload)
     else:
         service.create_comment(1, "This is the comment", 1, "user_name")
