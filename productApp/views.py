@@ -65,10 +65,14 @@ def comments(request, id):
     print("id from path variable: " + id)
     if request.method == 'GET':
         data = service.query_comments(id)
+        model_map = {}
+        for model in data:
+            model_map[model.id] = model
+
         comment_payload = {
             "code": 200,
             "message": "Success",
-            "comments": [CommentSerializer().convert_to_dict(comment) for comment in data]
+            "comments": [CommentSerializer().convert_to_dict(comment, model_map) for comment in data]
         }
         return JsonResponse(comment_payload)
     else:

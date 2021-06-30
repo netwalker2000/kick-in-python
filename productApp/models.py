@@ -34,6 +34,7 @@ class CommentTab(models.Model):
     user_name = models.CharField(max_length=200)
     status = models.IntegerField()
     topic_id = models.IntegerField()
+    to_id = models.IntegerField()
     created_at = models.IntegerField()
     updated_at = models.IntegerField()
 
