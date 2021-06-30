@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^products/(?P<id>\d+)/comments$', productApp.views.comments),
     url(r'^products/(?P<id>\d+)$', productApp.views.query_product_detail),
     url(r'^products/$', productApp.views.query_product_list),
+    url(r'^users/$', productApp.views.user_register),
+    url(r'^users/validation$', productApp.views.user_login),
 ]

@@ -31,17 +31,13 @@ ALLOWED_HOSTS = []
 
 # Application definition
 ADMIN_DISABLE = True
-# todo: also need to disalbe auth sessions
 INSTALLED_APPS = [
-    'productApp',
+    "productApp",
     'rest_framework_swagger',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
-
-MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'productProject.urls'
@@ -63,26 +59,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'productProject.wsgi.application'
-
-
-# Password validation
-# https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -117,3 +93,9 @@ DATABASES = {
     }
 }
 
+# Connection with TCP server
+TCP_HOST = "localhost"
+TCP_PORT = 8001
+TCP_NUM_CONNECTIONS = 50
+TCP_TIMEOUT_SECONDS = 60
+SECRET_OF_TOKEN = "dsffT5%1regvvrg$$"
