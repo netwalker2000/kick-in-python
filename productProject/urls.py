@@ -15,11 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 import productApp.views
-from rest_framework_swagger.views import get_swagger_view
-schema_view = get_swagger_view(title='Product APIs for entry task')
 
 urlpatterns = [
-    url(r'^$', schema_view),
     url(r'^products/(?P<id>\d+)/comments$', productApp.views.comments),
     url(r'^products/(?P<id>\d+)$', productApp.views.query_product_detail),
     url(r'^products/$', productApp.views.query_product_list),

@@ -33,8 +33,6 @@ ALLOWED_HOSTS = []
 ADMIN_DISABLE = True
 INSTALLED_APPS = [
     "productApp",
-    'rest_framework_swagger',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -51,7 +49,6 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },

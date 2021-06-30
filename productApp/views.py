@@ -1,10 +1,7 @@
 # Create your views here.
-import datetime
 import time
-import urllib
 
 from django.http import HttpResponse, JsonResponse
-from rest_framework.decorators import api_view
 import service
 
 
@@ -18,9 +15,6 @@ from productApp.serializers import ProductBriefSerializer, CommentSerializer, Ph
 global_comment_cache = {}
 
 
-@api_view(
-    ['GET']
-)
 def query_product_list(request):
     """
     This API is for query the product list.
@@ -47,9 +41,6 @@ def query_product_list(request):
     return JsonResponse(ret_payload)
 
 
-@api_view(
-    ['GET']
-)
 def query_product_detail(request, id):
     print("id from path variable: " + id)
     data = service.query_product_detail(id)
@@ -63,9 +54,6 @@ def query_product_detail(request, id):
     return JsonResponse(ret_payload)
 
 
-@api_view(
-    ['GET', 'POST']
-)
 def comments(request, id):
     print("id from path variable: " + id)
     if request.method == 'GET':
@@ -97,9 +85,6 @@ def comments(request, id):
         return JsonResponse({"code": 200, "message": "Success"})
 
 
-@api_view(
-    ['POST', 'GET']
-)
 def user_register(request):
     name = "user" + str(time.time())
     if "name" in request.query_params.keys():
@@ -120,9 +105,6 @@ def user_register(request):
     return JsonResponse(register_payload)
 
 
-@api_view(
-    ['POST', 'GET']
-)
 def user_login(request):
     name = "user" + str(time.time())
     if "name" in request.query_params.keys():
