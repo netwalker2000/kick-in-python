@@ -84,13 +84,37 @@ pymysql.install_as_MySQLdb()
 # db settings
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'product_db',
+        'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         "PASSWORD": 'root',
         "HOST": '127.0.0.1',
         'PORT': 3333,
-    }
+    },
+    'comment_shard_1': {
+        'NAME': 'comment_shard_1',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        "PASSWORD": 'root',
+        "HOST": '127.0.0.1',
+        'PORT': 3333,
+    },
+    'comment_shard_2': {
+        'NAME': 'comment_shard_2',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        "PASSWORD": 'root',
+        "HOST": '127.0.0.1',
+        'PORT': 3333,
+    },
+    'comment_shard_3': {
+        'NAME': 'comment_shard_3',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        "PASSWORD": 'root',
+        "HOST": '127.0.0.1',
+        'PORT': 3333,
+    },
 }
 
 # Connection with TCP server

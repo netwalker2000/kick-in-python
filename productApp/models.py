@@ -40,4 +40,5 @@ class CommentTab(models.Model):
 
     class Meta:
         db_table = "comment_tab"
+        app_label = "commentApp"
 
