@@ -16,7 +16,7 @@ def user_login(name, password, apply_timestamp=1625213873):
         tcp_connection.send_request(REGISTRATION_REQUEST_ID, payload)
         data = tcp_connection.recv_response()
         # todo : deal with response
-        # if go service said yes
+        # if go service.py said yes
         res = True
         if res:
             print("Yes")
