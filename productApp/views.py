@@ -55,6 +55,19 @@ def query_product_detail(request, id):
 
 
 def comments(request, id):
+    # todo: use meta program @validation
+    name = "user"
+    if "name" in request.GET.keys():
+        name = request.GET["name"]
+    apply_timestamp = "1625213873"
+    if "apply_timestamp" in request.GET.keys():
+        apply_timestamp = request.GET["apply_timestamp"]
+    token = ""
+    if "token" in request.GET.keys():
+        token = request.GET["token"]
+    if not user.login.validate_token(name, apply_timestamp, token):
+        return JsonResponse({"code": 403, "message": "Invalid token"})
+
     print("id from path variable: " + id)
     if request.method == 'GET':
         # return cached if not expired

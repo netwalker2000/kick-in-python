@@ -6,9 +6,9 @@ from user.config import REGISTRATION_REQUEST_ID
 from user.connection import TcpPersistentConnectionPool
 
 
-def user_login(name, password):
+def user_login(name, password, apply_timestamp=1625213873):
     # Construct request
-    r_string = '{"Name":"login","Args":["' + name + '","' + password + '"]}'
+    r_string = '{"Name":"login","Args":["' + name + '","' + password + '"] ' + str(apply_timestamp) + '}'
     payload = bytes(r_string)
 
     tcp_pool = TcpPersistentConnectionPool.instance()
@@ -20,17 +20,36 @@ def user_login(name, password):
         res = True
         if res:
             print("Yes")
-            token = make_token(name)
+            token = make_token(name, apply_timestamp)
             return token
         else:
             print("No")
             return "None"
 
-def make_token(name):
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
-    # with timestamp return back to user fe, fe store the token to cookies
-    str = name + timestampStr # future, add other such as id if it is necessary
+
+def validate_token(name, apply_timestamp, token):
+    curr_timestamp= datetime.now()
+    print(curr_timestamp)
+    # todo: check the apply_timestamp and current time, shouldn't be expired
+    str_raw = name + str(apply_timestamp)
     secret_of_host = settings.SECRET_OF_TOKEN
-    token = hash(hash(str + secret_of_host)) # double hash protection
+    # calc token and compare
+    regenerated_token = str(hash(hash(str_raw + secret_of_host)))
+    print(token + "[original], while regenerated Token:")
+    print(regenerated_token)
+    if token != regenerated_token:
+        return False
+    return True
+
+
+def make_token(name, apply_timestamp):
+    approval_timestamp = datetime.now()
+    print(approval_timestamp)
+    # todo: check the apply_timestamp and approval_timestamp, shouldn't be too different
+    # with timestamp return back to user fe, fe store the token to cookies
+    # future, add other such as id if it is necessary
+    str_raw = name + str(apply_timestamp)
+    secret_of_host = settings.SECRET_OF_TOKEN
+    # double hash protection
+    token = hash(hash(str_raw + secret_of_host))
     return token
