@@ -1,7 +1,6 @@
 import time
 
 import models
-import dao
 
 
 def product_service(name, category, last_updated_at, limit):
