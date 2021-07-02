@@ -3,13 +3,14 @@ from __future__ import unicode_literals
 
 import time
 
-from django.shortcuts import render
 from django.http import JsonResponse
 import service
 import user
 
 
 # global storage for comments tree to save the resource
+from commentApp.serializers import CommentSerializer
+
 global_comment_cache = {}
 
 
@@ -45,6 +46,7 @@ def comments(request, id):
             "message": "Success",
             "comments": [CommentSerializer().convert_to_dict(comment, model_map) for comment in data]
         }
+        print(comment_payload)
         if id not in global_comment_cache:
             global_comment_cache[id] = {
                 "id": id,
