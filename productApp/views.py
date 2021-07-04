@@ -4,12 +4,7 @@ import time
 from django.http import JsonResponse
 import service
 
-
-# Create your views here.
-import user.register
-import user.login
 from productApp.serializers import ProductBriefSerializer, PhotoSerializer
-
 
 
 def query_product_list(request):
@@ -49,40 +44,3 @@ def query_product_detail(request, id):
         "photos": [PhotoSerializer().convert_to_dict(photo) for photo in photo_data]
     }
     return JsonResponse(ret_payload)
-
-
-def user_register(request):
-    name = "user" + str(time.time())
-    if "name" in request.GET.keys():
-        name = request.GET["name"]
-    password = "password"
-    if "password" in request.GET.keys():
-        password = request.GET["password"]
-    email = "email"
-    if "email" in request.GET.keys():
-        email = request.GET["email"]
-    print("variables:[%s] [%s] [%s] " % (name, password, email))
-    data = user.register.register_user(name, password, email)
-    print(str(data))
-    register_payload = {
-        "code": 200,
-        "message": "Success",
-    }
-    return JsonResponse(register_payload)
-
-
-def user_login(request):
-    name = "user" + str(time.time())
-    if "name" in request.GET.keys():
-        name = request.GET["name"]
-    password = "password"
-    if "password" in request.GET.keys():
-        password = request.GET["password"]
-    data = user.login.user_login(name, password)
-    # todo: format data
-    login_payload = {
-        "code": 200,
-        "message": "Success",
-        "token": data
-    }
-    return JsonResponse(login_payload)

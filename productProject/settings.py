@@ -26,7 +26,7 @@ SECRET_KEY = 'c7l9*d6(6tct4ap2wyet$vo+e)4m-2sy4eykuefz6rp0myca39'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["10.143.143.19"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -115,7 +115,7 @@ DATABASES = {
 }
 
 # Connection with TCP server
-TCP_HOST = "10.143.143.25"
+TCP_HOST = "localhost"
 TCP_PORT = 8001
 TCP_NUM_CONNECTIONS = 50
 TCP_TIMEOUT_SECONDS = 60
