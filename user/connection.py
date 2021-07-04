@@ -35,32 +35,32 @@ class TcpPersistentConnection(object):
 		self.pool.keep_alive_queue.put_nowait(self.sock_fd)
 		self.pool.connection_count.release()
 
-	def send_request(self, request_id, payload_bytearray):
+	def send_request(self, request_id, payload_bytearray, sock_fd):
 		logging.debug("Sending binaries for request id %d", request_id)
 		raw_message_length = len(payload_bytearray)
 		print("raw_message_length: %d" % raw_message_length)
 		payload_bytearray = struct.pack('>I', raw_message_length) + payload_bytearray
-		self.sendall(payload_bytearray)
+		sock_fd.sendall(payload_bytearray)
 		logging.info("Sent %d bytes", len(payload_bytearray))
 
-	def recv_response(self):
+	def receive_response(self, sock_fd):
 		# Read message length and unpack it into an integer
 		logging.debug("Receiving payload length")
-		raw_message_length = self.recvall(4)
+		raw_message_length = self.receive_all(4, sock_fd)
 		message_length = struct.unpack('>I', raw_message_length)[0]
 		if message_length == 0:
 			return None
 		# Read the message data
-		return self.recvall(message_length)
+		return self.receive_all(message_length, sock_fd)
 
-	def recvall(self, n):
+	def receive_all(self, n, sock_fd):
 		logging.debug("Receiving payload of %d bytes", n)
 		data = bytearray()
 		while len(data) < n:
 			packet = None
 			with gevent.Timeout(settings.TCP_TIMEOUT_SECONDS, False):
 				try:
-					packet = self.recv(n - len(data))
+					packet = sock_fd.recv(n - len(data))
 				except Exception as e:
 					logging.error(e)
 					raise UnknownError("Internal server error")
