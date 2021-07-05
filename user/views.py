@@ -33,7 +33,7 @@ def user_login(request):
 
     if name in cache.keys():
         data = cache[name]
-        print("cached")
+        # print("cached")
     else:
         password = "password"
         if "password" in request.GET.keys():
