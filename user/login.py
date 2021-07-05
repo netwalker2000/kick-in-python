@@ -15,7 +15,7 @@ def user_login(name, password, apply_timestamp=1625213873):
     for i in range(0):
         combined_string += "," + r_string
     combined_string += "]"
-    print(combined_string)
+    # print(combined_string)
     payload = bytes(combined_string)
 
     tcp_pool = TcpPersistentConnectionPool.instance()
