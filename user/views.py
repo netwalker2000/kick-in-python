@@ -26,18 +26,18 @@ def user_register(request):
 
 
 def user_login(request):
-    # name = "user" + str(time.time())
-    # if "name" in request.GET.keys():
-    #     name = request.GET["name"]
-    # password = "password"
-    # if "password" in request.GET.keys():
-    #     password = request.GET["password"]
-    # data = login.user_login(name, password)
+    name = "user"
+    if "name" in request.GET.keys():
+        name = request.GET["name"]
+    password = "password"
+    if "password" in request.GET.keys():
+        password = request.GET["password"]
+    data = login.user_login(name, password)
 
     # todo: format data
     login_payload = {
         "code": 200,
         "message": "Success",
-        "token": "data"
+        "token": data
     }
     return JsonResponse(login_payload)

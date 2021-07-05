@@ -12,7 +12,7 @@ def user_login(name, password, apply_timestamp=1625213873):
     # Construct request
     r_string = '{"Name":"login","Args":["' + name + '","' + password + '"]}'
     combined_string = '[' + r_string
-    for i in range(20):
+    for i in range(1):
         combined_string += "," + r_string
     combined_string += "]"
     print(combined_string)
