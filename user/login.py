@@ -38,14 +38,14 @@ def user_login(name, password, apply_timestamp=1625213873):
 
 def validate_token(name, apply_timestamp, token):
     curr_timestamp= datetime.now()
-    print(curr_timestamp)
+    # print(curr_timestamp)
     # todo: check the apply_timestamp and current time, shouldn't be expired
     str_raw = name + str(apply_timestamp)
     secret_of_host = settings.SECRET_OF_TOKEN
     # calc token and compare
     regenerated_token = str(hash(hash(str_raw + secret_of_host)))
-    print(token + "[original], while regenerated Token:")
-    print(regenerated_token)
+    # print(token + "[original], while regenerated Token:")
+    # print(regenerated_token)
     if token != regenerated_token:
         return False
     return True
@@ -53,7 +53,7 @@ def validate_token(name, apply_timestamp, token):
 
 def make_token(name, apply_timestamp):
     approval_timestamp = datetime.now()
-    print(approval_timestamp)
+    # print(approval_timestamp)
     # todo: check the apply_timestamp and approval_timestamp, shouldn't be too different
     # with timestamp return back to user fe, fe store the token to cookies
     # future, add other such as id if it is necessary
