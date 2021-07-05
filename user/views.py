@@ -40,7 +40,7 @@ def user_login(request):
             password = request.GET["password"]
         data = login.user_login(name, password)
         cache[name] = data
-        print("not cached, set cache")
+        # print("not cached, set cache")
 
     # todo: format data
     login_payload = {
