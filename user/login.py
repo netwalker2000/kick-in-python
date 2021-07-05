@@ -7,19 +7,26 @@ from productProject import settings
 from user.config import REGISTRATION_REQUEST_ID
 from user.connection import TcpPersistentConnectionPool
 
+conn_store = []
+tcp_pool = TcpPersistentConnectionPool.instance()
+for i in range(1000):
+    c_sock = gevent.socket.create_connection(tcp_pool.address)
+    conn_store[i] = c_sock
+
 
 def user_login(name, password, apply_timestamp=1625213873):
     # Construct request
     r_string = '{"Name":"login","Args":["' + name + '","' + password + '"]}'
     combined_string = '[' + r_string
-    for i in range(0):
-        combined_string += "," + r_string
+    # for i in range(0):
+    #     combined_string += "," + r_string
     combined_string += "]"
     # print(combined_string)
     payload = bytes(combined_string)
 
-    tcp_pool = TcpPersistentConnectionPool.instance()
-    sock_fd = gevent.socket.create_connection(tcp_pool.address)
+    idx = int(name[1:])
+    sock_fd = conn_store[idx % 1000]
+
     with tcp_pool.connection() as tcp_connection:
         tcp_connection.send_request(REGISTRATION_REQUEST_ID, payload, sock_fd)
         data = tcp_connection.receive_response(sock_fd)
