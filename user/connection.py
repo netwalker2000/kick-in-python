@@ -38,7 +38,7 @@ class TcpPersistentConnection(object):
 	def send_request(self, request_id, payload_bytearray, sock_fd):
 		logging.debug("Sending binaries for request id %d", request_id)
 		raw_message_length = len(payload_bytearray)
-		print("raw_message_length: %d" % raw_message_length)
+		# print("raw_message_length: %d" % raw_message_length)
 		payload_bytearray = struct.pack('>I', raw_message_length) + payload_bytearray
 		sock_fd.sendall(payload_bytearray)
 		logging.info("Sent %d bytes", len(payload_bytearray))

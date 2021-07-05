@@ -11,24 +11,28 @@ from user.connection import TcpPersistentConnectionPool
 def user_login(name, password, apply_timestamp=1625213873):
     # Construct request
     r_string = '{"Name":"login","Args":["' + name + '","' + password + '"]}'
-    print(r_string)
-    payload = bytes(r_string)
+    combined_string = '[' + r_string
+    for i in range(20):
+        combined_string += "," + r_string
+    combined_string += "]"
+    print(combined_string)
+    payload = bytes(combined_string)
 
     tcp_pool = TcpPersistentConnectionPool.instance()
     sock_fd = gevent.socket.create_connection(tcp_pool.address)
     with tcp_pool.connection() as tcp_connection:
         tcp_connection.send_request(REGISTRATION_REQUEST_ID, payload, sock_fd)
         data = tcp_connection.receive_response(sock_fd)
-        print(data)
+        # print(data)
         # todo : deal with response
         # if go service.py said yes
         res = True
         if res:
-            print("Yes")
+            # print("Yes")
             token = make_token(name, apply_timestamp)
             return token
         else:
-            print("No")
+            # print("No")
             return "None"
 
 
