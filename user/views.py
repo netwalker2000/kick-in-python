@@ -6,6 +6,7 @@ from user import register, login
 
 cache = {}
 
+
 def user_register(request):
     name = "user" + str(time.time())
     if "name" in request.GET.keys():

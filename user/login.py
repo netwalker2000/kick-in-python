@@ -1,17 +1,10 @@
 import time
 from datetime import datetime
 
-import gevent
 
 from productProject import settings
 from user.config import REGISTRATION_REQUEST_ID
 from user.connection import TcpPersistentConnectionPool
-
-conn_store = []
-tcp_pool = TcpPersistentConnectionPool.instance()
-for i in range(1000):
-    c_sock = gevent.socket.create_connection(tcp_pool.address)
-    conn_store.append(c_sock)
 
 
 def user_login(name, password, apply_timestamp=1625213873):
@@ -24,13 +17,11 @@ def user_login(name, password, apply_timestamp=1625213873):
     # print(combined_string)
     payload = bytes(combined_string)
 
-    idx = int(name[1:])
-    sock_fd = conn_store[idx % 1000]
-
+    tcp_pool = TcpPersistentConnectionPool.instance()
     with tcp_pool.connection() as tcp_connection:
-        tcp_connection.send_request(REGISTRATION_REQUEST_ID, payload, sock_fd)
-        data = tcp_connection.receive_response(sock_fd)
-        # print(data)
+        tcp_connection.send_request(REGISTRATION_REQUEST_ID, payload)
+        data = tcp_connection.receive_response()
+        print(data)
         # todo : deal with response
         # if go service.py said yes
         res = True
