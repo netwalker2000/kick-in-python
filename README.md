@@ -21,4 +21,4 @@ This will open a port on 8000 and serve the request
 
 # Architecture
 
-![Architecture](https://confluence.shopee.io/display/SPCT/API+Design?preview=/564300972/585153234/image2021-7-6_16-56-5.png)
+![Architecture](./docs/architecture.png)
