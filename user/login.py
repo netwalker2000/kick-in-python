@@ -11,7 +11,7 @@ conn_store = []
 tcp_pool = TcpPersistentConnectionPool.instance()
 for i in range(1000):
     c_sock = gevent.socket.create_connection(tcp_pool.address)
-    conn_store[i] = c_sock
+    conn_store.append(c_sock)
 
 
 def user_login(name, password, apply_timestamp=1625213873):
