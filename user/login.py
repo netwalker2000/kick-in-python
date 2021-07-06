@@ -21,7 +21,7 @@ def user_login(name, password, apply_timestamp=1625213873):
     with tcp_pool.connection() as tcp_connection:
         tcp_connection.send_request(REGISTRATION_REQUEST_ID, payload)
         data = tcp_connection.receive_response()
-        print(data)
+        # print(data)
         # todo : deal with response
         # if go service.py said yes
         res = True
