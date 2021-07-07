@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import logging
 import time
 
 from django.http import JsonResponse
@@ -29,12 +30,12 @@ def comments(request, id):
     if not user.login.validate_token(name, apply_timestamp, token):
         return JsonResponse({"code": 403, "message": "Invalid token"})
 
-    print("id from path variable: " + id)
+    logging.info("id from path variable: " + id)
     if request.method == 'GET':
         # return cached if not expired
         if id in global_comment_cache:
-            print("hit cache!")
-            print(global_comment_cache[id])
+            logging.info("hit cache!")
+            logging.info(global_comment_cache[id])
             # return global_comment_cache[id].comment_payload
         data = service.query_comments(id)
         model_map = {}
@@ -46,7 +47,7 @@ def comments(request, id):
             "message": "Success",
             "comments": [CommentSerializer().convert_to_dict(comment, model_map) for comment in data]
         }
-        print(comment_payload)
+        logging.info(comment_payload)
         if id not in global_comment_cache:
             global_comment_cache[id] = {
                 "id": id,
@@ -58,7 +59,7 @@ def comments(request, id):
 
 
 def create_comment(request, id):
-    print("id from path variable: " + id)
+    logging.info("id from path variable: " + id)
     content = "This is the comment"
     if "content" in request.GET.keys():
         content = request.GET["content"]

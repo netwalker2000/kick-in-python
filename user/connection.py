@@ -96,7 +96,7 @@ class TcpPersistentConnectionPool(object):
 			cls._instance.connection_count = gevent.lock.BoundedSemaphore(settings.TCP_NUM_CONNECTIONS)
 			cls._instance.keep_alive_queue = gevent.queue.Queue(settings.TCP_NUM_CONNECTIONS)
 			try:
-				print("instance init conns")
+				logging.info("instance init conns")
 				# for _ in xrange(cls._instance.pool_size):
 				# 	cls._instance.keep_alive_queue.put_nowait(gevent.socket.create_connection(cls._instance.address))
 			except Exception as e:

@@ -1,3 +1,4 @@
+import logging
 import time
 
 from django.http import JsonResponse
@@ -17,9 +18,9 @@ def user_register(request):
     email = "email"
     if "email" in request.GET.keys():
         email = request.GET["email"]
-    print("variables:[%s] [%s] [%s] " % (name, password, email))
+    logging.info("variables:[%s] [%s] [%s] " % (name, password, email))
     data = register.register_user(name, password, email)
-    print(str(data))
+    logging.info(str(data))
     register_payload = {
         "code": 200,
         "message": "Success",

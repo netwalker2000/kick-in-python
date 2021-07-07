@@ -1,4 +1,5 @@
 # Create your views here.
+import logging
 import time
 
 from django.http import JsonResponse
@@ -34,7 +35,7 @@ def query_product_list(request):
 
 
 def query_product_detail(request, id):
-    print("id from path variable: " + id)
+    logging.info("id from path variable: " + id)
     data = service.query_product_detail(id)
     photo_data = service.query_photos(id)
     ret_payload = {
