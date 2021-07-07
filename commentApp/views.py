@@ -55,6 +55,18 @@ def comments(request, id):
                 "comment_payload": comment_payload
             }
         return JsonResponse(comment_payload)
-    else:
-        service.create_comment(1, "This is the comment", 1, "user_name")
-        return JsonResponse({"code": 200, "message": "Success"})
+
+
+def create_comment(request, id):
+    print("id from path variable: " + id)
+    content = "This is the comment"
+    if "content" in request.GET.keys():
+        content = request.GET["content"]
+    user_id = 1
+    if "user_id" in request.GET.keys():
+        user_id = request.GET["user_id"]
+    user_name = "user_name"
+    if "user_name" in request.GET.keys():
+        user_name = request.GET["user_name"]
+    service.create_comment(id, content, user_id, user_name)
+    return JsonResponse({"code": 200, "message": "Success"})
