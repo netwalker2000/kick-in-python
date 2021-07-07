@@ -27,26 +27,27 @@ class TcpPersistentConnection(object):
 			logging.debug("Closing connection due to exception")
 			# self.pool.keep_alive_queue.put_nowait(None)
 			# self.pool.connection_count.release()
-			self.sock_fd.close()
+			# self.sock_fd.close()
 			return
 
 		# Return the socket
+		self.sock_fd.close()
 		logging.debug("Releasing connection")
 		# self.pool.keep_alive_queue.put_nowait(self.sock_fd)
 		# self.pool.connection_count.release()
 
-	def send_request(self, request_id, payload_bytearray, sock_fd):
+	def send_request(self, request_id, payload_bytearray):
 		logging.debug("Sending binaries for request id %d", request_id)
 		raw_message_length = len(payload_bytearray)
 		# print("raw_message_length: %d" % raw_message_length)
 		payload_bytearray = struct.pack('>I', raw_message_length) + payload_bytearray
-		sock_fd.sendall(payload_bytearray)
+		self.sendall(payload_bytearray)
 		logging.info("Sent %d bytes", len(payload_bytearray))
 
-	def receive_response(self, sock_fd):
+	def receive_response(self):
 		# Read message length and unpack it into an integer
 		logging.debug("Receiving payload length")
-		raw_message_length = self.receive_all(4, sock_fd)
+		raw_message_length = self.receive_all(4)
 		if raw_message_length == 0:
 			return None
 		message_length = struct.unpack('>I', raw_message_length)[0]
@@ -55,14 +56,14 @@ class TcpPersistentConnection(object):
 		# Read the message data
 		return self.receive_all(message_length)
 
-	def receive_all(self, n, sock_fd):
+	def receive_all(self, n):
 		logging.debug("Receiving payload of %d bytes", n)
 		data = bytearray()
 		while len(data) < n:
 			packet = None
 			with gevent.Timeout(settings.TCP_TIMEOUT_SECONDS, False):
 				try:
-					packet = sock_fd.receive(n - len(data))
+					packet = self.receive(n - len(data))
 				except Exception as e:
 					logging.error(e)
 					# raise UnknownError("Internal server error")
@@ -78,10 +79,11 @@ class TcpPersistentConnectionPool(object):
 
 	def connection(self):
 		logging.debug("Obtaining connection")
-		self.connection_count.acquire()
-		sock_fd = self.keep_alive_queue.get()
-		if sock_fd is None:
-			sock_fd = gevent.socket.create_connection(self.address)
+		sock_fd = gevent.socket.create_connection(self.address)
+		# self.connection_count.acquire()
+		# sock_fd = self.keep_alive_queue.get()
+		# if sock_fd is None:
+		# 	sock_fd = gevent.socket.create_connection(self.address)
 		return TcpPersistentConnection(sock_fd, self)
 
 	@classmethod
@@ -94,8 +96,9 @@ class TcpPersistentConnectionPool(object):
 			cls._instance.connection_count = gevent.lock.BoundedSemaphore(settings.TCP_NUM_CONNECTIONS)
 			cls._instance.keep_alive_queue = gevent.queue.Queue(settings.TCP_NUM_CONNECTIONS)
 			try:
-				for _ in xrange(cls._instance.pool_size):
-					cls._instance.keep_alive_queue.put_nowait(gevent.socket.create_connection(cls._instance.address))
+				print("instance init conns")
+				# for _ in xrange(cls._instance.pool_size):
+				# 	cls._instance.keep_alive_queue.put_nowait(gevent.socket.create_connection(cls._instance.address))
 			except Exception as e:
 				logging.error(e)
 				del cls._instance
