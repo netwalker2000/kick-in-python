@@ -86,6 +86,29 @@ CACHES = {
     }
 }
 
+# logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    # 'incremental': True,
+    'root': {
+        'level': 'DEBUG',
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+            # 'filename': 'entry_test_benchmark.log',
+        },
+    },
+    'loggers': {
+        'bench': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        }
+    }
+}
+
 # db settings
 DATABASES = {
     'default': {
