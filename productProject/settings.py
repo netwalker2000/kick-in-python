@@ -16,7 +16,6 @@ import pymysql
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = 'c7l9*d6(6tct4ap2wyet$vo+e)4m-2sy4eykuefz6rp0myca39'
 DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-
 
 # Application definition
 ADMIN_DISABLE = True
@@ -70,13 +68,23 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
 
 pymysql.install_as_MySQLdb()
+
+# Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+        }
+    }
+}
 
 # db settings
 DATABASES = {

@@ -1,7 +1,6 @@
 import time
 from datetime import datetime
 
-import gevent
 
 from productProject import settings
 from user.config import REGISTRATION_REQUEST_ID
