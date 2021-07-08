@@ -49,7 +49,7 @@ def user_login(request):
     password = request.GET["password"]
 
     cached_pw = cache.get("name_key_%s" % name)
-    if cached_pw is not None and password == cached_pw:
+    if cached_pw != "" and password == cached_pw:
         token = cached_pw
     else:
         token = login.user_login(name, password)
