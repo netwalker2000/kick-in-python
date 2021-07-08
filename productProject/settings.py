@@ -156,3 +156,8 @@ TCP_PORT = 8001
 TCP_NUM_CONNECTIONS = 50
 TCP_TIMEOUT_SECONDS = 60
 SECRET_OF_TOKEN = "dsffT5%1regvvrg$$"
+
+try:
+    from dev_settings import *
+except ImportError:
+    pass
