@@ -1,3 +1,4 @@
+import functools
 import time
 from datetime import datetime
 
@@ -30,8 +31,22 @@ def user_login(name, password, apply_timestamp=1625213873):
             return "None"
 
 
+def login_validate_decorator(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        request = args[0]
+        name = request.GET["name"]
+        apply_timestamp = request.GET["apply_timestamp"]
+        token = request.GET["token"]
+        if validate_token(name, apply_timestamp, token):
+            return func(*args, **kwargs)
+        else:
+            raise Exception("Authentication failed")
+    return wrapper
+
+
 def validate_token(name, apply_timestamp, token):
-    curr_timestamp= datetime.now()
+    curr_timestamp = datetime.now()
     # todo: check the apply_timestamp and current time, shouldn't be expired
     str_raw = name + str(apply_timestamp)
     secret_of_host = settings.SECRET_OF_TOKEN

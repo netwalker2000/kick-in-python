@@ -1,29 +1,22 @@
 # Create your views here.
 import logging
-import time
 
 from django.http import JsonResponse
 import service
 
 from productApp.serializers import ProductBriefSerializer, PhotoSerializer
+from user.login import login_validate_decorator
 
 
+@login_validate_decorator
 def query_product_list(request):
     """
     This API is for query the product list.
     """
-    name = ""
-    if "name" in request.GET.keys():
-        name = request.GET["name"]
-    category = ""
-    if "category" in request.GET.keys():
-        category = request.GET["category"]
-    last_updated_at = 0
-    if "last_updated_at" in request.GET.keys():
-        last_updated_at = int(request.GET["last_updated_at"])
-    limit = 15
-    if "limit" in request.GET.keys():
-        limit = int(request.GET["limit"])
+    name = request.GET["name"]
+    category = request.GET["category"]
+    last_updated_at = int(request.GET["last_updated_at"])
+    limit = int(request.GET["limit"])
 
     data = service.product_service(name, category, last_updated_at, limit)
     ret_payload = {
@@ -34,6 +27,7 @@ def query_product_list(request):
     return JsonResponse(ret_payload)
 
 
+@login_validate_decorator
 def query_product_detail(request, id):
     logging.info("id from path variable: " + id)
     data = service.query_product_detail(id)
