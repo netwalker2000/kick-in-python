@@ -36,6 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+MIDDLEWARE_CLASSES = [
+    "productProject.exception.CustomizedException"
+]
+
 ROOT_URLCONF = 'productProject.urls'
 
 TEMPLATES = [
@@ -76,6 +80,7 @@ STATIC_URL = '/static/'
 pymysql.install_as_MySQLdb()
 
 # Cache
+CACHE_TIMEOUT = 1800
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',

@@ -2,7 +2,9 @@ import functools
 import logging
 
 from django.http import JsonResponse
+from django.core.cache import cache
 
+from productProject import settings
 from user import register, login
 
 
@@ -46,12 +48,17 @@ def user_login(request):
     name = request.GET["name"]
     password = request.GET["password"]
 
-    data = login.user_login(name, password)
+    cached_pw = cache.get("name_key_%s" % name)
+    if cached_pw is not None and password == cached_pw:
+        token = cached_pw
+    else:
+        token = login.user_login(name, password)
+        cache.set("name_key_%s" % name, password, settings.CACHE_TIMEOUT)
 
     # todo: format data
     login_payload = {
         "code": 200,
         "message": "Success",
-        "token": data
+        "token": token
     }
     return JsonResponse(login_payload)
