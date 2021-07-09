@@ -1,43 +1,28 @@
 import functools
+import json
 import logging
 
 from django.http import JsonResponse
-from django.core.cache import cache
+from django.views.decorators.csrf import csrf_exempt
 
 import utils.checks
-from productProject import settings
 from user import register, login
 
 
-def param_exist_in_request(*inputs):
-    def param_pre_check(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            request = args[0]
-            for _, element in enumerate(inputs):
-                if element not in request.GET.keys():
-                    err_msg = "{} does not exist in request!".format(element)
-                    logging.warn(err_msg)
-                    err_payload = {
-                        "code": 400,
-                        "message": err_msg
-                    }
-                    return JsonResponse(err_payload)
-            return func(*args, **kwargs)
-
-        return wrapper
-
-    return param_pre_check
-
-
-@param_exist_in_request("name", "password", "email")
+@csrf_exempt
+@utils.checks.method_param_check_request("POST", "name", "password", "email")
 def user_register(request):
-    # if httpmethod == post
-    name = request.GET["name"]
-    password = request.GET["password"]
-    email = request.GET["email"]
-    is_correct, err_payload = utils.checks.check_email(email)
+    r_dict = json.loads(request.body)
+    name = r_dict["name"]
+    password = r_dict["password"]
+    email = r_dict["email"]
+    is_correct = utils.checks.check_email(email)
     if not is_correct:
+        err_msg = "Invalid Email {}".format(email)
+        err_payload = {
+            "code": 400,
+            "message": err_msg
+        }
         return JsonResponse(err_payload)
     data = register.register_user(name, password, email)
     logging.info(str(data))
@@ -48,10 +33,12 @@ def user_register(request):
     return JsonResponse(register_payload)
 
 
-@param_exist_in_request("name", "password")
+@csrf_exempt
+@utils.checks.method_param_check_request("POST", "name", "password")
 def user_login(request):
-    name = request.GET["name"]
-    password = request.GET["password"]
+    r_dict = json.loads(request.body)
+    name = r_dict["name"]
+    password = r_dict["password"]
     token = login.user_login(name, password)
     if token != "None":
         return JsonResponse({

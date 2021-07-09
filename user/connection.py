@@ -101,7 +101,5 @@ class TcpPersistentConnectionPool(object):
 					cls._instance.keep_alive_queue.put_nowait(gevent.socket.create_connection(cls._instance.address))
 			except Exception as e:
 				logging.error(e)
-				del cls._instance
-				raise UnknownError("Internal server error")
 			logging.info("Connection pool instance initialized")
 		return cls._instance
