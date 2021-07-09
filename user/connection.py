@@ -8,6 +8,8 @@ from django.conf import settings
 
 from utils.errors import UnknownError
 
+tcp_setting = settings.TCP_SERVERS["default"]
+
 
 class TcpPersistentConnection(object):
 	def __init__(self, sock_fd, pool):
@@ -61,7 +63,7 @@ class TcpPersistentConnection(object):
 		data = bytearray()
 		while len(data) < n:
 			packet = None
-			with gevent.Timeout(settings.TCP_TIMEOUT_SECONDS, False):
+			with gevent.Timeout(tcp_setting["TCP_TIMEOUT_SECONDS"], False):
 				try:
 					packet = self.receive(n - len(data))
 				except Exception as e:
@@ -91,10 +93,10 @@ class TcpPersistentConnectionPool(object):
 		if not hasattr(cls, '_instance'):
 			logging.debug("Initializing connection pool")
 			cls._instance = cls.__new__(cls)
-			cls._instance.address = (settings.TCP_HOST, settings.TCP_PORT)
-			cls._instance.pool_size = settings.TCP_NUM_CONNECTIONS
-			cls._instance.connection_count = gevent.lock.BoundedSemaphore(settings.TCP_NUM_CONNECTIONS)
-			cls._instance.keep_alive_queue = gevent.queue.Queue(settings.TCP_NUM_CONNECTIONS)
+			cls._instance.address = (tcp_setting["TCP_HOST"], tcp_setting["TCP_PORT"])
+			cls._instance.pool_size = tcp_setting["TCP_NUM_CONNECTIONS"]
+			cls._instance.connection_count = gevent.lock.BoundedSemaphore(tcp_setting["TCP_NUM_CONNECTIONS"])
+			cls._instance.keep_alive_queue = gevent.queue.Queue(tcp_setting["TCP_NUM_CONNECTIONS"])
 			try:
 				logging.info("instance init conns")
 				# for _ in xrange(cls._instance.pool_size):

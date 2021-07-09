@@ -36,8 +36,8 @@ def login_validate_decorator(func):
     def wrapper(*args, **kwargs):
         request = args[0]
         name = request.GET["name"]
-        apply_timestamp = request.GET["apply_timestamp"]
-        token = request.GET["token"]
+        apply_timestamp = request.GET["apply_timestamp"] # header
+        token = request.GET["token"] #header
         if validate_token(name, apply_timestamp, token):
             return func(*args, **kwargs)
         else:

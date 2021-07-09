@@ -120,41 +120,38 @@ DATABASES = {
         'NAME': 'product_db',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
-        "PASSWORD": 'root',
-        "HOST": '127.0.0.1',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
         'PORT': 3306,
     },
     'comment_shard_1': {
         'NAME': 'comment_shard_1',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
-        "PASSWORD": 'root',
-        "HOST": '127.0.0.1',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
         'PORT': 3306,
     },
     'comment_shard_2': {
         'NAME': 'comment_shard_2',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
-        "PASSWORD": 'root',
-        "HOST": '127.0.0.1',
-        'PORT': 3306,
-    },
-    'comment_shard_3': {
-        'NAME': 'comment_shard_3',
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        "PASSWORD": 'root',
-        "HOST": '127.0.0.1',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
         'PORT': 3306,
     },
 }
 
-# Connection with TCP server
-TCP_HOST = "10.143.143.25"
-TCP_PORT = 8001
-TCP_NUM_CONNECTIONS = 50
-TCP_TIMEOUT_SECONDS = 60
+# Connection with TCP servers
+TCP_SERVERS = {
+    'default': {
+        'TCP_HOST': '10.143.143.25',
+        'TCP_PORT': 8001,
+        'TCP_NUM_CONNECTIONS': 50,
+        'TCP_TIMEOUT_SECONDS': 60,
+    },
+}
+
 SECRET_OF_TOKEN = "dsffT5%1regvvrg$$"
 
 try:
