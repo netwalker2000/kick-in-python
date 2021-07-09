@@ -8,7 +8,7 @@ from django.conf import settings
 
 from utils.errors import UnknownError
 
-tcp_setting = settings.TCP_SERVERS["default"]
+tcp_setting = settings.TCP_SERVERS["localhost"]
 
 
 class TcpPersistentConnection(object):

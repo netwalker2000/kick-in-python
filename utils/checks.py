@@ -15,7 +15,12 @@ def check_email(email):
     # pass the regular expression
     # and the string in search() method
     if re.match(regex, email):
-        return True
+        return True, None
     else:
-        logging.WARN("Invalid Email %s" % email)
-        return False
+        err_msg = "Invalid Email {}".format(email)
+        logging.WARN(err_msg)
+        err_payload = {
+            "code": 400,
+            "message": err_msg
+        }
+        return False, err_payload
