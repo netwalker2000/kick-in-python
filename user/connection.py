@@ -29,7 +29,7 @@ class TcpPersistentConnection(object):
 			logging.debug("Closing connection due to exception")
 			# self.pool.keep_alive_queue.put_nowait(None)
 			# self.pool.connection_count.release()
-			# self.sock_fd.close()
+			self.sock_fd.close()
 			return
 
 		# Return the socket
@@ -62,15 +62,13 @@ class TcpPersistentConnection(object):
 		logging.debug("Receiving payload of %d bytes", n)
 		data = bytearray()
 		while len(data) < n:
-			packet = None
 			with gevent.Timeout(tcp_setting["TCP_TIMEOUT_SECONDS"], False):
 				try:
-					packet = self.receive(n - len(data))
+					packet_inner = self.receive(n - len(data))
 				except Exception as e:
 					logging.error(e)
 					# raise UnknownError("Internal server error")
-				return 0
-			data.extend(packet)
+			data.extend(packet_inner)
 		return data
 
 
@@ -99,8 +97,8 @@ class TcpPersistentConnectionPool(object):
 			cls._instance.keep_alive_queue = gevent.queue.Queue(tcp_setting["TCP_NUM_CONNECTIONS"])
 			try:
 				logging.info("instance init conns")
-				# for _ in xrange(cls._instance.pool_size):
-				# 	cls._instance.keep_alive_queue.put_nowait(gevent.socket.create_connection(cls._instance.address))
+				for _ in xrange(cls._instance.pool_size):
+					cls._instance.keep_alive_queue.put_nowait(gevent.socket.create_connection(cls._instance.address))
 			except Exception as e:
 				logging.error(e)
 				del cls._instance

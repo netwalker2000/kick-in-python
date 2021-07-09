@@ -140,13 +140,13 @@ TCP_SERVERS = {
     'default': {
         'TCP_HOST': '10.143.143.25',
         'TCP_PORT': 8001,
-        'TCP_NUM_CONNECTIONS': 100,
+        'TCP_NUM_CONNECTIONS': 50,
         'TCP_TIMEOUT_SECONDS': 60,
     },
     'localhost': {
         'TCP_HOST': 'localhost',
         'TCP_PORT': 8001,
-        'TCP_NUM_CONNECTIONS': 20,
+        'TCP_NUM_CONNECTIONS': 10,
         'TCP_TIMEOUT_SECONDS': 30,
     },
 }

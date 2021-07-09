@@ -39,7 +39,6 @@ def user_register(request):
     is_correct, err_payload = utils.checks.check_email(email)
     if not is_correct:
         return JsonResponse(err_payload)
-    logging.info("variables:[%s] [%s] [%s] " % (name, password, email))
     data = register.register_user(name, password, email)
     logging.info(str(data))
     register_payload = {
@@ -53,20 +52,16 @@ def user_register(request):
 def user_login(request):
     name = request.GET["name"]
     password = request.GET["password"]
-    try:
-        cached_pw = cache.get("name_key_%s" % name)
-    except:
-        pass
-    if cached_pw != "" and password == cached_pw:
-        token = cached_pw  # todo: hashed the pw ,and also store token
+    token = login.user_login(name, password)
+    if token != "None":
+        return JsonResponse({
+            "code": 200,
+            "message": "Success",
+            "token": token
+        })
     else:
-        token = login.user_login(name, password)
-        # cache.set("name_key_%s" % name, password, settings.CACHE_TIMEOUT)
+        return JsonResponse({
+            "code": 400,
+            "message": "Can not login, unmatched!"
+        })
 
-    # todo: format data
-    login_payload = {
-        "code": 200,
-        "message": "Success",
-        "token": token
-    }
-    return JsonResponse(login_payload)
