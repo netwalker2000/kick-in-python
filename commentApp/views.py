@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import json
 import logging
 import time
 
@@ -10,6 +11,7 @@ import user
 
 
 # global storage for comments tree to save the resource
+import utils.checks
 from commentApp.serializers import CommentSerializer
 from user.login import login_validate_decorator
 
@@ -45,10 +47,12 @@ def comments(request, id):
 
 
 @login_validate_decorator
+@utils.checks.method_param_check_request("POST", "content", "user_id", "user_name")
 def create_comment(request, id):
     logging.info("id from path variable: " + id)
-    content = request.GET["content"]
-    user_id = request.GET["user_id"]
-    user_name = request.GET["user_name"]
+    r_dict = json.loads(request.body)
+    content = r_dict["content"]
+    user_id = r_dict["user_id"]
+    user_name = r_dict["user_name"]
     service.create_comment(id, content, user_id, user_name)
     return JsonResponse({"code": 200, "message": "Success"})

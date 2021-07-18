@@ -8,7 +8,6 @@ from productApp.serializers import ProductBriefSerializer, PhotoSerializer
 from user.login import login_validate_decorator
 
 
-@login_validate_decorator
 def query_product_list(request):
     """
     This API is for query the product list.

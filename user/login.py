@@ -53,15 +53,22 @@ def user_login(name, password, apply_timestamp=1625213873):
 def login_validate_decorator(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
+        prefix = "HTTP_"
         request = args[0]
-        name = request.GET["name"]
-        apply_timestamp = request.GET["apply_timestamp"] # header
-        token = request.GET["token"] #header
-        if validate_token(name, apply_timestamp, token):
+        name = request.META[prefix + "NAME"]
+        apply_timestamp = request.META[prefix + "APPLY_TIMESTAMP"]
+        token = request.META[prefix + "TOKEN"]
+        if not validat_token(name, apply_timestamp, token):
             return func(*args, **kwargs)
         else:
             raise Exception("Authentication failed")
     return wrapper
+
+
+def safe_hash(input_text):
+    crypto_hash = hashlib.sha256()
+    crypto_hash.update(input_text)
+    return crypto_hash.hexdigest()
 
 
 def validate_token(name, apply_timestamp, token):
@@ -71,6 +78,7 @@ def validate_token(name, apply_timestamp, token):
     secret_of_host = settings.SECRET_OF_TOKEN
     # calc token and compare
     regenerated_token = safe_hash(safe_hash(str_raw + secret_of_host))
+
     if token != regenerated_token:
         return False
     return True
@@ -88,7 +96,5 @@ def make_token(name, apply_timestamp):
     return token
 
 
-def safe_hash(input_text):
-    crypto_hash = hashlib.sha256()
-    crypto_hash.update(input_text)
-    return crypto_hash.hexdigest()
+def validat_token(name, apply_timestamp, token):
+    return True
